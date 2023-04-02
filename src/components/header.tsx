@@ -12,6 +12,7 @@ import MenuList from "@mui/material/MenuList";
 import Divider from "@mui/material/Divider";
 import { MenuItem } from "./menuItem";
 import { TooLTipButton } from "../components/toolTipButton";
+import { useToggle } from "../hooks/useToggle";
 
 type titleTextAreaProps = {
   defaultValue: string;
@@ -41,6 +42,7 @@ function TitleTextArea({
 }
 
 export function Header() {
+  const [toggle, toggleValue] = useToggle();
   return (
     <AppBar sx={{ backgroundColor: "transparent", color: "black" }}>
       <Toolbar>
@@ -53,7 +55,7 @@ export function Header() {
             width="100%">
             <TooLTipButton
               title="menu"
-              onClick={() => {}}
+              onClick={() => toggleValue()}
               styles={(theme: any) => ({
                 display: "block",
                 [theme.breakpoints.up("sm")]: {
@@ -78,7 +80,7 @@ export function Header() {
 
           <MenuList
             sx={(theme) => ({
-              display: "none",
+              display: toggle ? "block" : "none",
               [theme.breakpoints.up("sm")]: {
                 display: "flex",
               },
