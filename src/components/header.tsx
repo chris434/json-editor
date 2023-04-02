@@ -1,3 +1,4 @@
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -28,7 +29,7 @@ function TitleTextArea({
   return (
     <Typography
       component="input"
-      defaultValue={defaultValue}
+      value={defaultValue}
       onChange={onChange}
       sx={(theme) => ({
         display: display == "block" ? "none" : "block",
@@ -43,6 +44,7 @@ function TitleTextArea({
 
 export function Header() {
   const [toggle, toggleValue] = useToggle();
+  const [title, setTitle] = useState("untitled");
   return (
     <AppBar sx={{ backgroundColor: "transparent", color: "black" }}>
       <Toolbar>
@@ -71,8 +73,8 @@ export function Header() {
               </Typography>
               <TitleTextArea
                 display="block"
-                defaultValue="untitled"
-                onChange={() => {}}
+                defaultValue={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Box>
             <Switch />
@@ -87,8 +89,8 @@ export function Header() {
             })}>
             <TitleTextArea
               display="none"
-              defaultValue="untitled"
-              onChange={() => {}}
+              defaultValue={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
             <Divider sx={{ marginTop: "1rem" }} />
 
