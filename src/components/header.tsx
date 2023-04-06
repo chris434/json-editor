@@ -2,18 +2,21 @@ import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Switch from "@mui/material/Switch";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
 import Redo from "@mui/icons-material/Redo";
 import Undo from "@mui/icons-material/Undo";
 import File from "@mui/icons-material/Article";
+import LightMode from "@mui/icons-material/LightMode";
+import DarkMode from "@mui/icons-material/DarkMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuList from "@mui/material/MenuList";
 import Divider from "@mui/material/Divider";
 import { MenuItem } from "./menuItem";
 import { TooLTipButton } from "../components/toolTipButton";
 import { useToggle } from "../hooks/useToggle";
+import { useToggleTheme } from "../providers/themeProvider";
 
 type titleTextAreaProps = {
   defaultValue: string;
@@ -26,6 +29,8 @@ function TitleTextArea({
   onChange,
   display,
 }: titleTextAreaProps) {
+  const theme = useTheme();
+
   return (
     <Typography
       component="input"
@@ -34,6 +39,8 @@ function TitleTextArea({
       sx={(theme) => ({
         display: display == "block" ? "none" : "block",
         border: 0,
+        background: "transparent",
+        color: theme.palette.mode === "dark" ? "white" : "black",
         [theme.breakpoints.up("sm")]: {
           display,
         },
@@ -45,8 +52,11 @@ function TitleTextArea({
 export function Header() {
   const [toggle, toggleValue] = useToggle();
   const [title, setTitle] = useState("untitled");
+  const { toggleTheme } = useToggleTheme();
+  const theme = useTheme();
+
   return (
-    <AppBar sx={{ backgroundColor: "transparent", color: "black" }}>
+    <AppBar color="default">
       <Toolbar>
         <Box width="100%">
           <Box
@@ -77,7 +87,12 @@ export function Header() {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Box>
-            <Switch />
+            <TooLTipButton
+              styles={{}}
+              title={theme.palette.mode == "dark" ? "light mode" : "dark mode"}
+              onClick={() => toggleTheme()}>
+              {theme.palette.mode == "dark" ? <LightMode /> : <DarkMode />}
+            </TooLTipButton>
           </Box>
 
           <MenuList
