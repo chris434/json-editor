@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
 
-type useLocalStorageProps = {
-  key: string;
-  intelValue: object | [];
-};
-
 export function useLocalStorage(key: string, intelValue: object | []) {
   const [localStorageState, setLocalStorageState] = useState({});
   const getLocalStorage = () => {
@@ -15,9 +10,9 @@ export function useLocalStorage(key: string, intelValue: object | []) {
     localStorage.setItem(key, JSON.stringify(value));
     setLocalStorageState(value);
   };
-  const localStorageItem = getLocalStorage();
 
   useEffect(() => {
+    const localStorageItem = getLocalStorage();
     if (!localStorageItem) setLocalStorage(intelValue);
     if (localStorageItem) setLocalStorageState(localStorageItem);
   }, []);

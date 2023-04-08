@@ -1,5 +1,6 @@
 import { useState, useContext, createContext, ReactNode } from "react";
 import { createTheme, ThemeProvider as MuiThemeProvider } from "@mui/material";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const darkTheme = createTheme({
   palette: {
@@ -19,7 +20,7 @@ type themeProviderProps = {
 
 const Provider = createContext(() => {});
 export function ThemeProvider({ children }: themeProviderProps) {
-  const [themeMode, setThemeMode] = useState("light");
+  const [themeMode, setThemeMode] = useLocalStorage("theme", { mode: "light" });
 
   const toggleTheme = () => {
     setThemeMode(themeMode === "dark" ? "light" : "dark");
