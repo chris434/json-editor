@@ -6,7 +6,7 @@ export function useLocalStorage(key: string, intelValue: object | []) {
     const value = localStorage.getItem(key);
     return value ? JSON.parse(value) : null;
   };
-  const setLocalStorage = (value: object | []) => {
+  const setLocalStorage = (value: object | string | []) => {
     localStorage.setItem(key, JSON.stringify(value));
     setLocalStorageState(value);
   };
@@ -17,5 +17,9 @@ export function useLocalStorage(key: string, intelValue: object | []) {
     if (localStorageItem) setLocalStorageState(localStorageItem);
   }, []);
 
-  return [localStorageState, setLocalStorage];
+  const returnValue: [object | string | [], Function] = [
+    localStorageState,
+    setLocalStorage,
+  ];
+  return returnValue;
 }
