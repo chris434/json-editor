@@ -10,7 +10,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <MainLayout>
         <Component {...pageProps} />
-        <div>klj</div>
       </MainLayout>
     </ThemeProvider>
   );

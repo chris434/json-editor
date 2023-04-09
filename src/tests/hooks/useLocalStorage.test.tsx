@@ -1,6 +1,5 @@
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { act, renderHook } from "@testing-library/react-hooks";
-
 import "jest-environment-jsdom";
 
 describe("local storage", () => {
