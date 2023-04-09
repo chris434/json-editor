@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 type tooltipButtonProps = {
   title: string;
   children: ReactNode;
-  styles: any;
+  styles?: any;
   onClick: (e: any) => void;
 };
 
