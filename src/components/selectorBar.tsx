@@ -1,61 +1,78 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import ExpandLess from "@mui/icons-material/ExpandLess";
 import { Select } from "./select";
 import { TooLTipButton } from "./toolTipButton";
 import { TOP_PARENT_TYPES } from "../data/typesData";
+import { useJson } from "../providers/jsonProvider";
 
 type selectorBarProps = {
-  selectType: "topParent" | "default";
-  inputLabel?: string;
-  selectLabel: string;
+  selectType?: "topParent" | "default";
+  dataIndex?: number;
 };
 
 export function SelectorBar({
   selectType = "default",
-  inputLabel,
-  selectLabel,
+  dataIndex = 0,
 }: selectorBarProps) {
-  const [topParentValue, setTopParentValue] = useState("");
+  const { dispatchJson, jsonData } = useJson();
+  const { collapsed, type } = jsonData.data[dataIndex];
   return (
     <Box>
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          gap: "1rem",
+          alignItems: "start",
           marginBottom: "1rem",
         }}>
-        <TooLTipButton title="collapse" onClick={() => {}}>
-          <ExpandMore fontSize="large" />
+        <TooLTipButton
+          title={collapsed ? "expand" : "collapse"}
+          onClick={(e) =>
+            dispatchJson({
+              type: "updateJsonData",
+              payload: { index: 0, data: { collapsed: !collapsed } },
+            })
+          }>
+          {collapsed ? (
+            <ExpandMore fontSize="large" />
+          ) : (
+            <ExpandLess fontSize="large" />
+          )}
         </TooLTipButton>
 
         <Box
           sx={(theme) => ({
             display: "flex",
-            gap: "1rem",
             flexDirection: "row",
+            alignItems: "center",
 
             [theme.breakpoints.only("xs")]: {
+              gap: "1rem",
               flexDirection: "column",
             },
           })}>
           {selectType === "default" && (
-            <TextField sx={{ width: "10rem" }} label={inputLabel} />
+            <TextField size="small" sx={{ width: "8rem" }} label="field" />
           )}
-
           <Select
-            label={selectLabel}
+            label="type"
             items={TOP_PARENT_TYPES}
-            value={topParentValue}
-            setValue={setTopParentValue}
+            value={type}
+            onChange={(e: any) =>
+              dispatchJson({
+                type: "updateJsonData",
+                payload: { index: 0, data: { type: e.target.value } },
+              })
+            }
           />
         </Box>
       </Box>
       <Divider />
-      <Box sx={{ padding: "1rem" }}>select a Type</Box>
+      {!collapsed && (
+        <Box sx={{ padding: "1rem" }}>{type ? type : "select a Type"}</Box>
+      )}
     </Box>
   );
 }

@@ -5,20 +5,21 @@ import InputLabel from "@mui/material/InputLabel";
 
 type selectProps = {
   items: string[];
-  setValue: Function;
+  onChange: Function;
   value: string;
   label: string;
 };
 
-export function Select({ items, setValue, value, label }: selectProps) {
+export function Select({ items, onChange, value, label }: selectProps) {
   return (
-    <FormControl sx={{ width: "10rem" }}>
+    <FormControl sx={{ width: "8rem" }}>
       <InputLabel id="select">{label}</InputLabel>
       <MuiSelect
+        size="small"
         labelId="select"
         label={label}
         value={value}
-        onChange={(e) => setValue(e.target.value)}>
+        onChange={(e) => onChange(e)}>
         {items.map((item) => {
           return <SelectItem value={item}>{item}</SelectItem>;
         })}

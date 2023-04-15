@@ -17,7 +17,7 @@ export function TooLTipButton({
 }: tooltipButtonProps) {
   return (
     <Tooltip title={title}>
-      <IconButton sx={styles} onClick={onClick}>
+      <IconButton sx={styles} onClick={(e) => onClick(e)}>
         {children}
       </IconButton>
     </Tooltip>
