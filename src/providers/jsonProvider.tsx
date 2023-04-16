@@ -18,10 +18,10 @@ export function JsonProvider({ children }: jsonProviderProps) {
     data: [
       {
         type: "",
-        id,
-        childId: null,
+        index: 0,
+        childrenIndexes: [],
         collapsed: false,
-        parentId: null,
+        parentIndex: null,
         value: null,
       },
     ],

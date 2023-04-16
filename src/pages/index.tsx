@@ -17,6 +17,9 @@ export default function Home() {
           },
         })}>
         <SelectorBar selectType="topParent" />
+        {/* {jsonData.data.map((data, i) => {
+          return <SelectorBar selectType="topParent" dataIndex={i} />;
+        })} */}
       </Paper>
     </Box>
   );

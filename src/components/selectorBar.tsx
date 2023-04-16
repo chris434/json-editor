@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
@@ -17,8 +18,20 @@ export function SelectorBar({
   selectType = "default",
   dataIndex = 0,
 }: selectorBarProps) {
+  const previousType = useRef("");
   const { dispatchJson, jsonData } = useJson();
-  const { collapsed, type } = jsonData.data[dataIndex];
+  const { collapsed, type, childrenIndexes } = jsonData.data[dataIndex];
+
+  const getChildren = () => {
+    return jsonData.data.filter((itemA, i) => {
+      const hasIndex = jsonData.data[dataIndex].childrenIndexes.some(
+        (itemB) => i === itemB
+      );
+
+      if (hasIndex) return itemA;
+    });
+  };
+
   return (
     <Box>
       <Box
@@ -32,7 +45,7 @@ export function SelectorBar({
           onClick={(e) =>
             dispatchJson({
               type: "updateJsonData",
-              payload: { index: 0, data: { collapsed: !collapsed } },
+              payload: { index: dataIndex, data: { collapsed: !collapsed } },
             })
           }>
           {collapsed ? (
@@ -60,18 +73,49 @@ export function SelectorBar({
             label="type"
             items={TOP_PARENT_TYPES}
             value={type}
-            onChange={(e: any) =>
-              dispatchJson({
-                type: "updateJsonData",
-                payload: { index: 0, data: { type: e.target.value } },
-              })
-            }
+            onChange={(e: any) => {
+              const { value } = e.target;
+              if (!previousType.current) {
+                previousType.current = value;
+                dispatchJson({
+                  type: "updateJsonData",
+                  payload: {
+                    index: dataIndex,
+                    data: { type: value },
+                  },
+                });
+                dispatchJson({
+                  type: "addField",
+                  payload: {
+                    data: {
+                      parentIndex: dataIndex,
+                      index: jsonData.data.length,
+                    },
+                  },
+                });
+              } else if (previousType.current !== value) {
+                previousType.current = value;
+                dispatchJson({
+                  type: "replaceField",
+                  payload: {
+                    index: dataIndex,
+                    data: { type: value },
+                  },
+                });
+              }
+            }}
           />
         </Box>
       </Box>
       <Divider />
       {!collapsed && (
-        <Box sx={{ padding: "1rem" }}>{type ? type : "select a Type"}</Box>
+        <Box sx={{ padding: "1rem" }}>
+          {childrenIndexes.length
+            ? getChildren().map((data) => {
+                return <SelectorBar dataIndex={data.index} />;
+              })
+            : "select type"}
+        </Box>
       )}
     </Box>
   );
